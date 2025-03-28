@@ -11,7 +11,7 @@ type Set[T comparable] map[T]struct{}
 // symmetric_difference()	^	Returns a set with the symmetric differences of two sets
 // symmetric_difference_update()	^=	Inserts the symmetric differences from this set and another
 
-func NewSet[T comparable](i ...T) Set[T] {
+func New[T comparable](i ...T) Set[T] {
 	s := Set[T]{}
 	s.Add(i...)
 	return s
@@ -33,7 +33,7 @@ func (s Set[T]) Clear() {
 
 // Copy returns a copy of the set
 func (s Set[T]) Copy() Set[T] {
-	c := NewSet[T]()
+	c := New[T]()
 	for k := range s {
 		c.Add(k)
 	}
@@ -92,7 +92,7 @@ func (s Set[T]) IsSuperset(o Set[T]) bool {
 
 // Union returns a set containing the union of sets
 func Union[T comparable](s ...Set[T]) Set[T] {
-	o := NewSet[T]()
+	o := New[T]()
 	for _, set := range s {
 		for k := range set {
 			o.Add(k)
@@ -103,7 +103,7 @@ func Union[T comparable](s ...Set[T]) Set[T] {
 
 // Difference returns a set containing the difference between a set and one or more other sets
 func Difference[T comparable](s ...Set[T]) Set[T] {
-	d := NewSet[T]()
+	d := New[T]()
 	for i := range s[0] {
 		found := false
 		for _, o := range s[1:] {
@@ -121,7 +121,7 @@ func Difference[T comparable](s ...Set[T]) Set[T] {
 
 // Intersection returns a set, that is the intersection of two or more other sets
 func Intersection[T comparable](s ...Set[T]) Set[T] {
-	o := NewSet[T]()
+	o := New[T]()
 	for i := range s[0] {
 		found := true
 		for _, set := range s[1:] {
