@@ -3,11 +3,7 @@ package readysetgo
 type Set[T comparable] map[T]struct{}
 
 // Functions implemented by Python set:
-// difference_update()	-=	Removes the items in this set that are also included in another, specified set
-// discard()	 	Remove the specified item
-// intersection_update()	&=	Removes the items in this set that are not present in other, specified set(s)
 // pop()	 	Removes an element from the set
-// remove()	 	Removes the specified element
 // symmetric_difference()	^	Returns a set with the symmetric differences of two sets
 // symmetric_difference_update()	^=	Inserts the symmetric differences from this set and another
 
@@ -92,6 +88,23 @@ func (s Set[T]) Remove(i T) bool {
 		return true
 	}
 	return false
+}
+
+// DifferenceUpdate removes the items in this set that are also included in other, specified set(s)
+func (s Set[T]) DifferenceUpdate(o ...Set[T]) {
+	for i := range Union(o...) {
+		s.Remove(i)
+	}
+}
+
+// IntersectionUpdate removes the items in this set that are not present in other, specified set(s)
+func (s Set[T]) IntersectionUpdate(o ...Set[T]) {
+	u := Union(o...)
+	for i := range s {
+		if !u.Has(i) {
+			s.Remove(i)
+		}
+	}
 }
 
 // Union returns a set containing the union of sets

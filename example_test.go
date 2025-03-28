@@ -35,3 +35,23 @@ func ExampleSet_Remove() {
 	// remove 2: false
 	// set: map[1:{} 3:{}]
 }
+
+func ExampleSet_DifferenceUpdate() {
+	a := readysetgo.New("apple", "banana", "cherry")
+	b := readysetgo.New("google", "microsoft", "apple")
+	c := readysetgo.New("cherry", "micra", "bluebird")
+	a.DifferenceUpdate(b, c)
+	fmt.Println("set:", a)
+	// Output:
+	// set: map[banana:{}]
+}
+
+func ExampleSet_IntersectionUpdate() {
+	x := readysetgo.New("a", "b", "c")
+	y := readysetgo.New("c", "d", "e")
+	z := readysetgo.New("f", "g", "c")
+	x.IntersectionUpdate(y, z)
+	fmt.Println("set:", x)
+	// Output:
+	// set: map[c:{}]
+}

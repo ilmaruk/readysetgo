@@ -165,6 +165,22 @@ func TestSet_Remove(t *testing.T) {
 	assertSet(t, s, []int{1, 3})
 }
 
+func TestSet_DifferenceUpdate(t *testing.T) {
+	a := readysetgo.New("apple", "banana", "cherry")
+	b := readysetgo.New("google", "microsoft", "apple")
+	c := readysetgo.New("cherry", "micra", "bluebird")
+	a.DifferenceUpdate(b, c)
+	assertSet(t, a, []string{"banana"})
+}
+
+func TestSet_IntersectionUpdate(t *testing.T) {
+	x := readysetgo.New("a", "b", "c")
+	y := readysetgo.New("c", "d", "e")
+	z := readysetgo.New("f", "g", "c")
+	x.IntersectionUpdate(y, z)
+	assertSet(t, x, []string{"c"})
+}
+
 func TestUnion(t *testing.T) {
 	s := readysetgo.Union(readysetgo.New(1, 2, 3), readysetgo.New(3, 4, 5),
 		readysetgo.New(5, 6, 7))
