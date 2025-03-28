@@ -40,11 +40,6 @@ func (s Set[T]) Copy() Set[T] {
 	return c
 }
 
-// Discard removes the specified item
-// func (s Set[T]) Discard(i T) {
-// 	delete(s, i)
-// }
-
 // Has tells if the set contains the specified item
 func (s Set[T]) Has(i T) bool {
 	_, ok := s[i]
@@ -88,6 +83,15 @@ func (s Set[T]) IsDisjoint(o Set[T]) bool {
 // IsSuperset returns whether this set contains another set or not
 func (s Set[T]) IsSuperset(o Set[T]) bool {
 	return o.IsSubset(s)
+}
+
+// Remove removes the specified item from the set and returns true if it was found or false otherwise
+func (s Set[T]) Remove(i T) bool {
+	if _, ok := s[i]; ok {
+		delete(s, i)
+		return true
+	}
+	return false
 }
 
 // Union returns a set containing the union of sets

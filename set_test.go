@@ -153,6 +153,18 @@ func TestSet_IsSuperset(t *testing.T) {
 	}
 }
 
+func TestSet_Remove(t *testing.T) {
+	s := readysetgo.New(1, 2, 3)
+
+	// Remove existing item
+	require.True(t, s.Remove(2), "expected to remove 2 from set")
+	assertSet(t, s, []int{1, 3})
+
+	// Remove non-existing item
+	require.False(t, s.Remove(4), "expected not to remove 4 from set")
+	assertSet(t, s, []int{1, 3})
+}
+
 func TestUnion(t *testing.T) {
 	s := readysetgo.Union(readysetgo.New(1, 2, 3), readysetgo.New(3, 4, 5),
 		readysetgo.New(5, 6, 7))
