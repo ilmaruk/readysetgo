@@ -1,0 +1,138 @@
+package readysetgo
+
+type Set[T comparable] map[T]struct{}
+
+// Functions implemented by Python set:
+// difference_update()	-=	Removes the items in this set that are also included in another, specified set
+// discard()	 	Remove the specified item
+// intersection_update()	&=	Removes the items in this set that are not present in other, specified set(s)
+// pop()	 	Removes an element from the set
+// remove()	 	Removes the specified element
+// symmetric_difference()	^	Returns a set with the symmetric differences of two sets
+// symmetric_difference_update()	^=	Inserts the symmetric differences from this set and another
+
+func NewSet[T comparable](i ...T) Set[T] {
+	s := Set[T]{}
+	s.Add(i...)
+	return s
+}
+
+// Add adds one or more items to the set
+func (s Set[T]) Add(i ...T) {
+	for _, v := range i {
+		s[v] = struct{}{}
+	}
+}
+
+// Clear removes all the items from the set
+func (s Set[T]) Clear() {
+	for k := range s {
+		delete(s, k)
+	}
+}
+
+// Copy returns a copy of the set
+func (s Set[T]) Copy() Set[T] {
+	c := NewSet[T]()
+	for k := range s {
+		c.Add(k)
+	}
+	return c
+}
+
+// Discard removes the specified item
+// func (s Set[T]) Discard(i T) {
+// 	delete(s, i)
+// }
+
+// Has tells if the set contains the specified item
+func (s Set[T]) Has(i T) bool {
+	_, ok := s[i]
+	return ok
+}
+
+// Items returns all the items in the set
+func (s Set[T]) Items() []T {
+	items := make([]T, 0, len(s))
+	for k := range s {
+		items = append(items, k)
+	}
+	return items
+}
+
+// Update updates the set with the union of this set and others
+func (s Set[T]) Update(others ...Set[T]) {
+	for _, o := range others {
+		for k := range o {
+			s.Add(k)
+		}
+	}
+}
+
+// IsSubset returns whether another set contains this set or not
+func (s Set[T]) IsSubset(o Set[T]) bool {
+	for k := range s {
+		if !o.Has(k) {
+			return false
+		}
+	}
+	return true
+}
+
+// IsDisjoint returns whether two sets have a intersection or not
+func (s Set[T]) IsDisjoint(o Set[T]) bool {
+	i := Intersection(s, o)
+	return len(i) == 0
+}
+
+// IsSuperset returns whether this set contains another set or not
+func (s Set[T]) IsSuperset(o Set[T]) bool {
+	return o.IsSubset(s)
+}
+
+// Union returns a set containing the union of sets
+func Union[T comparable](s ...Set[T]) Set[T] {
+	o := NewSet[T]()
+	for _, set := range s {
+		for k := range set {
+			o.Add(k)
+		}
+	}
+	return o
+}
+
+// Difference returns a set containing the difference between a set and one or more other sets
+func Difference[T comparable](s ...Set[T]) Set[T] {
+	d := NewSet[T]()
+	for i := range s[0] {
+		found := false
+		for _, o := range s[1:] {
+			if o.Has(i) {
+				found = true
+				break
+			}
+		}
+		if !found {
+			d.Add(i)
+		}
+	}
+	return d
+}
+
+// Intersection returns a set, that is the intersection of two or more other sets
+func Intersection[T comparable](s ...Set[T]) Set[T] {
+	o := NewSet[T]()
+	for i := range s[0] {
+		found := true
+		for _, set := range s[1:] {
+			if !set.Has(i) {
+				found = false
+				break
+			}
+		}
+		if found {
+			o.Add(i)
+		}
+	}
+	return o
+}

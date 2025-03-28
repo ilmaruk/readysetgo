@@ -1,0 +1,33 @@
+name: Main
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run unit tests
+        run: make test
+
+      - name: Update coverage report
+        uses: ncruces/go-coverage-report@v0.3.0
+        with:
+          report: true
+          chart: true
+          amend: true
+        # if: |
+        #   matrix.os == 'ubuntu-latest' &&
+        #   github.event_name == 'push'  
+        continue-on-error: true
